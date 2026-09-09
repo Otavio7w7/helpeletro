@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Instalações e manutenções elétricas residenciais, comerciais e industriais em Campinas e região.">
+  <title>Help Eletro | Soluções elétricas em Campinas e região</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg-2:#0a1728;
+      --surface:#0f1d30;
+      --surface-2:#14243a;
+      --light:#f5f7fa;
+      --white:#ffffff;
+      --text:#dce5ee;
+      --muted:#96a5b7;
+      --dark:#0c1726;
+      --accent:#f7c514;
+      --accent-2:#ffdc55;
+      --green:#25D366;
+      --line:rgba(255,255,255,.10);
+      --shadow:0 18px 50px rgba(2,9,18,.16);
+      --radius:24px;
+      --radius-sm:16px;
+      --wrap:min(1180px, calc(100% - 40px));
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:"Manrope",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--dark);background:var(--light);line-height:1.6;overflow-x:hidden}
+    img{display:block;width:100%;height:auto}
+    a{text-decoration:none;color:inherit}
+    button,input,textarea,select{font:inherit}
+    .wrap{width:var(--wrap);margin-inline:auto}
+    .light-section{background:var(--light)}
+    .section-kicker,.eyebrow{margin:0 0 12px;font-size:.78rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#b08400}
+    h1,h2,h3{font-family:"Space Grotesk","Manrope",sans-serif;line-height:1.07;margin-top:0;letter-spacing:-.035em}
+    h1{font-size:clamp(3rem,7vw,6.2rem);max-width:900px;margin-bottom:24px}
+    h2{font-size:clamp(2rem,4.5vw,4rem);margin-bottom:18px}
+    h3{font-size:1.3rem}
+    p{margin-top:0}
+    .button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 22px;border-radius:999px;font-weight:800;transition:.25s ease}
+    .button-primary{background:var(--accent);color:#131313;box-shadow:0 10px 30px rgba(247,197,20,.26)}
+    .button-primary:hover{transform:translateY(-2px);background:var(--accent-2)}
+    .hero{position:relative;min-height:780px;color:var(--white);background:linear-gradient(90deg,rgba(4,12,23,.96) 0%,rgba(4,12,23,.82) 47%,rgba(4,12,23,.30) 100%),url("https://helpeletro.netlify.app/assets/infraestrutura.jpeg") center/cover no-repeat;overflow:hidden}
+    .hero::after{content:"";position:absolute;inset:auto -180px -260px auto;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,rgba(247,197,20,.28),transparent 68%);pointer-events:none}
+    .site-header{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:28px;padding:25px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+    .brand img{width:155px;max-height:68px;object-fit:contain}
+    nav{display:flex;align-items:center;gap:26px;font-size:.93rem;font-weight:700}
+    nav>a:not(.nav-cta){color:rgba(255,255,255,.80)}
+    nav>a:not(.nav-cta):hover{color:#fff}
+    .nav-cta{padding:12px 18px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px)}
+    .nav-cta:hover{background:var(--accent);border-color:var(--accent);color:#111}
+    .mobile-menu{display:none;font-size:1.5rem}
+    .hero-content{position:relative;z-index:3;padding:120px 0 110px}
+    .hero .eyebrow{color:var(--accent)}
+    .hero-copy{max-width:630px;font-size:1.18rem;color:rgba(255,255,255,.76);margin-bottom:30px}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+    .availability{display:flex;align-items:center;gap:10px;margin:24px 0 0;color:rgba(255,255,255,.67);font-size:.93rem}
+    .availability span{width:8px;height:8px;background:#43db83;border-radius:50%;box-shadow:0 0 0 6px rgba(67,219,131,.10)}
+    .availability b{color:#fff}
+    .about{padding:110px 0}
+    .about-grid{display:grid;grid-template-columns:1.03fr .97fr;gap:72px;align-items:center}
+    .about-photo{position:relative}
+    .about-photo img{aspect-ratio:4/4.4;object-fit:cover;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .about-photo::before{content:"";position:absolute;inset:24px -24px -24px 24px;border:2px solid var(--accent);border-radius:var(--radius);z-index:-1}
+    .about-photo span{position:absolute;right:-28px;bottom:34px;background:var(--accent);color:#111;font-weight:800;padding:16px 20px;border-radius:14px;line-height:1.2;box-shadow:var(--shadow)}
+    .about-copy p{color:#5e6875;max-width:640px}
+    .text-link{font-weight:800;color:#111;display:inline-block;margin-top:12px}
+    .text-link:hover{color:#b08400}
+    .differentials,.portfolio{background:var(--bg);color:var(--white);padding:105px 0;position:relative;overflow:hidden}
+    .differentials::before,.portfolio::before{content:"";position:absolute;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(247,197,20,.10),transparent 70%);top:-120px;right:-60px}
+    .section-heading{display:grid;grid-template-columns:1.2fr .8fr;gap:50px;align-items:end;margin-bottom:48px}
+    .section-heading>p{color:#727d8c;max-width:440px;margin-bottom:8px}
+    .dark-heading>p{color:var(--muted)}
+    .dark-heading .section-kicker{color:var(--accent)}
+    .diff-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .diff-grid article{min-height:245px;padding:28px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018));transition:.25s ease}
+    .diff-grid article:hover{transform:translateY(-5px);border-color:rgba(247,197,20,.45)}
+    .diff-grid article>span,.service-card>div>span{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:rgba(247,197,20,.12);color:var(--accent);font-size:.78rem;font-weight:800;margin-bottom:48px}
+    .diff-grid p{color:var(--muted);font-size:.93rem}
+    .services{padding:110px 0}
+    .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .service-card{background:#fff;border:1px solid #e8ecf0;border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(18,34,54,.06);transition:.28s ease}
+    .service-card:hover{transform:translateY(-7px);box-shadow:0 18px 50px rgba(18,34,54,.12)}
+    .service-card img{height:235px;object-fit:cover}
+    .service-card>div{padding:26px}
+    .service-card>div>span{margin-bottom:20px;background:#fff7d6;color:#9b7500}
+    .service-card h3{margin-bottom:12px}
+    .service-card p{color:#6f7884;font-size:.94rem;min-height:74px}
+    .service-card a{font-weight:800;font-size:.9rem}
+    .service-card a:hover{color:#9b7500}
+    .gallery{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:16px;grid-auto-rows:275px}
+    .gallery figure{margin:0;position:relative;overflow:hidden;border-radius:20px;background:var(--surface)}
+    .gallery-large{grid-row:span 2}
+    .gallery-wide{grid-column:span 2}
+    .gallery img{width:100%;height:100%;object-fit:cover;transition:.5s ease}
+    .gallery-large img{object-fit:contain;object-position:center top;background:#08101a}
+    .gallery-large:hover img{transform:none}
+    .gallery figure::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(4,12,22,.90))}
+    .gallery figure:hover img{transform:scale(1.045)}
+    .gallery figcaption{position:absolute;left:20px;right:20px;bottom:18px;z-index:2;font-weight:800;font-size:1rem}
+    .gallery figcaption span{display:block;color:#c1c9d3;font-weight:500;font-size:.8rem;margin-top:3px}
+    .region{padding:110px 0}
+    .region-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:65px;align-items:start}
+    .region-grid>div:first-child p:not(.section-kicker){color:#6f7884;max-width:540px}
+    .region-button{background:var(--dark);color:#fff;margin-top:14px}
+    .region-button:hover{background:var(--accent);color:#111;transform:translateY(-2px)}
+    .city-list{border-top:1px solid #dfe4ea}
+    .city-list p{display:flex;align-items:center;gap:18px;margin:0;padding:18px 4px;border-bottom:1px solid #dfe4ea;font-weight:800;font-size:1.03rem}
+    .city-list span{color:#a17600;font-size:.75rem;width:30px}
+    .final-cta{background:var(--accent);padding:82px 0;position:relative;overflow:hidden}
+    .final-cta::after{content:"";position:absolute;right:-80px;top:-130px;width:340px;height:340px;border-radius:50%;border:1px solid rgba(0,0,0,.12);box-shadow:0 0 0 45px rgba(0,0,0,.03),0 0 0 90px rgba(0,0,0,.025)}
+    .final-cta .section-kicker{color:#5f4a00}
+    .final-inner{display:flex;justify-content:space-between;align-items:center;gap:40px;position:relative;z-index:2}
+    .final-inner h2{margin-bottom:8px}
+    .final-inner p{margin-bottom:0}
+    .final-inner>a{display:inline-flex;align-items:center;justify-content:center;min-width:220px;padding:18px 26px;border-radius:999px;background:#111;color:#fff;font-weight:800;transition:.2s ease}
+    .final-inner>a:hover{transform:translateY(-2px);background:#fff;color:#111}
+    footer{background:#050c16;color:#fff;padding:72px 0 28px}
+    .footer-grid{display:grid;grid-template-columns:1.4fr .7fr 1fr;gap:55px;padding-bottom:50px;border-bottom:1px solid rgba(255,255,255,.10)}
+    footer img{width:150px;margin-bottom:22px}
+    footer p,footer span,footer a{color:#8997aa;font-size:.9rem}
+    footer h3{font-size:.92rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
+    footer a{display:block;margin:9px 0;transition:.2s}
+    footer a:hover{color:#fff}
+    .footer-bottom{display:flex;justify-content:space-between;gap:24px;padding-top:24px}
+    .floating-whatsapp{position:fixed;right:24px;bottom:24px;z-index:20;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;box-shadow:0 14px 36px rgba(37,211,102,.34);transition:.25s ease}
+    .floating-whatsapp:hover{transform:translateY(-4px) scale(1.03)}
+    @media (max-width:980px){nav{display:none}.mobile-menu{display:block}.hero{min-height:720px}.hero-content{padding-top:100px}.about-grid,.region-grid{grid-template-columns:1fr;gap:46px}.section-heading{grid-template-columns:1fr;gap:8px}.diff-grid{grid-template-columns:repeat(2,1fr)}.services-grid{grid-template-columns:repeat(2,1fr)}.gallery{grid-template-columns:1fr 1fr}.gallery-large{grid-row:span 1}.gallery-wide{grid-column:span 2}.footer-grid{grid-template-columns:1fr 1fr}.footer-grid>div:first-child{grid-column:span 2}}
+    @media (max-width:640px){:root{--wrap:min(100% - 28px,1180px)}h1{font-size:clamp(2.7rem,14vw,4.2rem)}h2{font-size:clamp(2rem,10vw,3rem)}.hero{min-height:700px;background:linear-gradient(180deg,rgba(4,12,23,.90),rgba(4,12,23,.82)),url("https://helpeletro.netlify.app/assets/infraestrutura.jpeg") center/cover no-repeat}.site-header{padding:18px 0}.brand img{width:132px}.hero-content{padding:92px 0 80px}.about,.services,.region,.differentials,.portfolio{padding:78px 0}.about-photo::before{display:none}.about-photo span{right:12px;bottom:12px}.diff-grid,.services-grid{grid-template-columns:1fr}.diff-grid article{min-height:auto}.diff-grid article>span{margin-bottom:28px}.service-card p{min-height:auto}.gallery{grid-template-columns:1fr;grid-auto-rows:260px}.gallery-wide{grid-column:span 1}.final-inner{flex-direction:column;align-items:flex-start}.final-inner>a{width:100%}.footer-grid{grid-template-columns:1fr}.footer-grid>div:first-child{grid-column:span 1}.footer-bottom{flex-direction:column}.floating-whatsapp{width:56px;height:56px;right:16px;bottom:16px}}
+  </style>
+</head>
+<body>
+<main>
+  <section class="hero" id="inicio">
+    <header class="site-header wrap">
+      <a class="brand" href="#inicio" aria-label="Help Eletro — início"><img src="https://helpeletro.netlify.app/assets/logo-help-eletro.png" alt="Help Eletro"></a>
+      <nav aria-label="Navegação principal"><a href="#sobre">Sobre</a><a href="#servicos">Serviços</a><a href="#trabalhos">Trabalhos</a><a href="#regiao">Região</a><a class="nav-cta" href="https://wa.me/5519997287304?text=Ol%C3%A1%2C%20gostaria%20de%20solicitar%20um%20or%C3%A7amento." target="_blank">Falar no WhatsApp</a></nav>
+      <a class="mobile-menu" href="#servicos" aria-label="Abrir navegação">☰</a>
+    </header>
+    <div class="hero-content wrap"><p class="eyebrow">Instalações · Manutenções · Segurança</p><h1>Soluções elétricas com segurança e confiança em Campinas e região.</h1><p class="hero-copy">Instalações e manutenções elétricas para residências, comércios e indústrias.</p><div class="hero-actions"><a class="button button-primary" href="https://wa.me/5519997287304?text=Ol%C3%A1%2C%20gostaria%20de%20solicitar%20um%20or%C3%A7amento." target="_blank">Solicitar orçamento →</a></div><p class="availability"><span></span> Atendimento todos os dias <b>08h às 22h</b></p></div>
+  </section>
+
+  <section class="about light-section" id="sobre"><div class="wrap about-grid"><div class="about-photo"><img src="https://helpeletro.netlify.app/assets/infraestrutura.jpeg" alt="Instalação elétrica executada pela Help Eletro"><span>Execução técnica<br>e cuidadosa</span></div><div class="about-copy"><p class="section-kicker">Sobre a Help Eletro</p><h2>Experiência e compromisso em cada serviço.</h2><p>A Help Eletro atua há 2 anos em instalações, manutenções e adequações elétricas para clientes residenciais, comerciais e industriais em Campinas e região.</p><p>O atendimento começa com a compreensão real da necessidade de cada espaço. A partir disso, o serviço é conduzido com organização, clareza e cuidado em cada etapa.</p><a class="text-link" href="https://wa.me/5519997287304" target="_blank">Conversar sobre meu projeto →</a></div></div></section>
+
+  <section class="differentials"><div class="wrap"><div class="section-heading dark-heading"><div><p class="section-kicker">Por que escolher</p><h2>Atendimento preparado para diferentes demandas.</h2></div><p>Do primeiro contato à conclusão, cada solução é orientada pelo contexto do imóvel e pela necessidade do cliente.</p></div><div class="diff-grid"><article><span>01</span><h3>Atendimento regional</h3><p>Presença em Campinas, Valinhos, Vinhedo, Paulínia, Itatiba e cidades próximas.</p></article><article><span>02</span><h3>Soluções sob medida</h3><p>O serviço é definido de acordo com o espaço, a demanda e a rotina de uso.</p></article><article><span>03</span><h3>Residencial e industrial</h3><p>Atuação em casas, comércios e instalações industriais com necessidades distintas.</p></article><article><span>04</span><h3>Das 08h às 22h</h3><p>Ampla janela de atendimento, todos os dias, para facilitar o agendamento.</p></article></div></div></section>
+
+  <section class="services light-section" id="servicos"><div class="wrap"><div class="section-heading"><div><p class="section-kicker">Serviços</p><h2>Estrutura elétrica bem executada, do essencial ao complexo.</h2></div><p>Atendimento para novas instalações, melhorias, manutenção e segurança.</p></div><div class="services-grid">
+    <article class="service-card"><img src="https://helpeletro.netlify.app/assets/perfil-led.jpeg" alt="Instalações Elétricas Residenciais"><div><span>01</span><h3>Instalações Elétricas Residenciais</h3><p>Projetos, ampliações e novos pontos com execução organizada para deixar sua casa pronta para o uso diário.</p><a href="https://wa.me/5519997287304" target="_blank">Solicitar orçamento →</a></div></article>
+    <article class="service-card"><img src="https://helpeletro.netlify.app/assets/quadro-interno.jpeg" alt="Manutenção Elétrica"><div><span>02</span><h3>Manutenção Elétrica</h3><p>Diagnóstico e correção de falhas, sobrecargas e instalações comprometidas, com atenção à origem do problema.</p><a href="https://wa.me/5519997287304" target="_blank">Solicitar orçamento →</a></div></article>
+    <article class="service-card"><img src="https://helpeletro.netlify.app/assets/acabamento.jpeg" alt="Instalações Comerciais"><div><span>03</span><h3>Instalações Comerciais</h3><p>Infraestrutura elétrica pensada para a rotina do seu negócio, da iluminação aos equipamentos e sistemas internos.</p><a href="https://wa.me/5519997287304" target="_blank">Solicitar orçamento →</a></div></article>
+    <article class="service-card"><img src="https://helpeletro.netlify.app/assets/infraestrutura.jpeg" alt="Instalações Industriais"><div><span>04</span><h3>Instalações Industriais</h3><p>Soluções para ambientes de maior demanda, com distribuição adequada e execução técnica para cada operação.</p><a href="https://wa.me/5519997287304" target="_blank">Solicitar orçamento →</a></div></article>
+    <article class="service-card"><img src="https://helpeletro.netlify.app/assets/som-seguranca.jpeg" alt="Sistemas de Segurança"><div><span>05</span><h3>Sistemas de Segurança</h3><p>Instalação de câmeras e infraestrutura para ampliar o controle e a proteção de imóveis e estabelecimentos.</p><a href="https://wa.me/5519997287304" target="_blank">Solicitar orçamento →</a></div></article>
+    <article class="service-card"><img src="https://helpeletro.netlify.app/assets/quadro-final.jpeg" alt="Adequações Elétricas"><div><span>06</span><h3>Adequações Elétricas</h3><p>Atualização de quadros, circuitos e componentes para uma instalação mais segura, funcional e bem dimensionada.</p><a href="https://wa.me/5519997287304" target="_blank">Solicitar orçamento →</a></div></article>
+  </div></div></section>
+
+  <section class="portfolio" id="trabalhos"><div class="wrap"><div class="section-heading dark-heading"><div><p class="section-kicker">Trabalhos realizados</p><h2>Detalhes que mostram a qualidade da execução.</h2></div><p>Registros reais de serviços realizados pela Help Eletro.</p></div><div class="gallery"><figure class="gallery-large"><img src="https://helpeletro.netlify.app/assets/antes-depois.jpeg" alt="Transformação da iluminação de fachada comercial"><figcaption>Iluminação comercial <span>Fachada · Antes e depois</span></figcaption></figure><figure><img src="https://helpeletro.netlify.app/assets/perfil-led.jpeg" alt="Perfil de LED instalado em teto"><figcaption>Perfil LED <span>Iluminação técnica</span></figcaption></figure><figure><img src="https://helpeletro.netlify.app/assets/som-iluminacao.jpeg" alt="Iluminação e som integrados"><figcaption>Integração de sistemas <span>Som e iluminação</span></figcaption></figure><figure class="gallery-wide"><img src="https://helpeletro.netlify.app/assets/quadro-interno.jpeg" alt="Quadro elétrico organizado"><figcaption>Quadro elétrico <span>Proteção e organização</span></figcaption></figure></div></div></section>
+
+  <section class="region light-section" id="regiao"><div class="wrap region-grid"><div><p class="section-kicker">Área de atendimento</p><h2>Atendimento elétrico em Campinas e cidades próximas.</h2><p>Consulte a disponibilidade para o seu bairro ou cidade pelo WhatsApp.</p><a class="button region-button" href="https://wa.me/5519997287304" target="_blank">Verificar disponibilidade →</a></div><div class="city-list"><p><span>01</span>Campinas</p><p><span>02</span>Valinhos</p><p><span>03</span>Vinhedo</p><p><span>04</span>Paulínia</p><p><span>05</span>Itatiba</p><p><span>06</span>Cidades próximas</p></div></div></section>
+
+  <section class="final-cta"><div class="wrap final-inner"><div><p class="section-kicker">Fale com a Help Eletro</p><h2>Precisa de um serviço elétrico?</h2><p>Fale com a Help Eletro e solicite seu orçamento.</p></div><a href="https://wa.me/5519997287304" target="_blank"><span>Solicite um orçamento</span></a></div></section>
+
+  <footer><div class="wrap footer-grid"><div><img src="https://helpeletro.netlify.app/assets/logo-help-eletro.png" alt="Help Eletro"><p>Instalações e manutenções elétricas para residências, comércios e indústrias.</p></div><div><h3>Navegação</h3><a href="#sobre">Sobre</a><a href="#servicos">Serviços</a><a href="#trabalhos">Trabalhos</a><a href="#regiao">Região atendida</a></div><div><h3>Contato</h3><a href="https://wa.me/5519997287304" target="_blank">(19) 99728-7304</a><a href="https://www.instagram.com/help_eletro25" target="_blank">Instagram · @help_eletro25</a><span>Todos os dias · 08h às 22h</span></div></div><div class="wrap footer-bottom"><span>© 2026 Help Eletro</span><span>Campinas e região</span></div></footer>
+
+  <a class="floating-whatsapp" href="https://wa.me/5519997287304?text=Ol%C3%A1%2C%20gostaria%20de%20solicitar%20um%20or%C3%A7amento." target="_blank" aria-label="Solicitar orçamento pelo WhatsApp"><svg width="27" height="27" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479s1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.03-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.002-5.45 4.437-9.884 9.89-9.884 2.64.001 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 7.006c-.003 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0 0 12.055 0C5.495 0 .16 5.335.157 11.893c0 2.096.547 4.142 1.588 5.945L.057 24l6.3-1.654a11.9 11.9 0 0 0 5.693 1.45h.005c6.558 0 11.894-5.335 11.897-11.893a11.82 11.82 0 0 0-3.49-8.413Z"/></svg></a>
+</main>
+</body>
+</html>
