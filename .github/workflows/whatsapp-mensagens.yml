@@ -1,0 +1,52 @@
+name: Mensagens WhatsApp por serviço
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar mensagens específicas dos cards
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.parse import quote
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          mensagens = {
+              'Instalações residenciais': 'Olá! Vi no site da Help Eletro o serviço de Instalações residenciais e gostaria de solicitar um orçamento.',
+              'Iluminação e perfil LED': 'Olá! Vi no site da Help Eletro o serviço de Iluminação e perfil LED e gostaria de solicitar um orçamento.',
+              'Quadros e distribuição': 'Olá! Vi no site da Help Eletro o serviço de Quadros e distribuição e gostaria de solicitar um orçamento.',
+              'Adequações elétricas': 'Olá! Vi no site da Help Eletro o serviço de Adequações elétricas e gostaria de solicitar um orçamento.'
+          }
+
+          for titulo, mensagem in mensagens.items():
+              novo_link = 'https://wa.me/5519997287304?text=' + quote(mensagem, safe='')
+              padrao = rf'(<article class="card reveal">.*?<h3>{re.escape(titulo)}</h3>.*?<a href=")https://wa\.me/5519997287304(?:\?text=[^"]*)?(" target="_blank">Solicitar orçamento →</a>.*?</article>)'
+              s, n = re.subn(padrao, rf'\1{novo_link}\2', s, count=1, flags=re.S)
+              if n != 1:
+                  raise SystemExit(f'Não foi possível atualizar o card: {titulo}')
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Publicar atualização
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Adiciona mensagens específicas do WhatsApp por serviço [skip ci]"
+          git push
