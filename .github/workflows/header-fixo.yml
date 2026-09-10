@@ -1,0 +1,100 @@
+name: Header flutuante persistente
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Aplicar header fixo e acessível em toda a página
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          marker_css = '/* HEADER_FLUTUANTE_PERSISTENTE */'
+          css = r'''
+/* HEADER_FLUTUANTE_PERSISTENTE */
+section[id]{scroll-margin-top:110px}
+header#siteHeader{
+  position:fixed;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  width:var(--wrap);
+  z-index:45;
+  padding:15px 18px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:20px;
+  background:rgba(7,17,31,.76);
+  backdrop-filter:blur(18px) saturate(135%);
+  -webkit-backdrop-filter:blur(18px) saturate(135%);
+  box-shadow:0 16px 44px rgba(2,10,20,.22);
+  transition:padding .25s ease,background .25s ease,box-shadow .25s ease,border-color .25s ease;
+}
+header#siteHeader.scrolled{
+  padding:10px 16px;
+  background:rgba(7,17,31,.94);
+  border-color:rgba(77,181,255,.18);
+  box-shadow:0 14px 38px rgba(2,10,20,.34);
+}
+header#siteHeader .brand img{transition:width .25s ease,max-height .25s ease}
+header#siteHeader.scrolled .brand img{width:138px;max-height:54px}
+@media(max-width:980px){
+  header#siteHeader{top:10px;padding:11px 13px;border-radius:17px}
+  header#siteHeader.scrolled{padding:9px 12px}
+  header#siteHeader .brand img,header#siteHeader.scrolled .brand img{width:132px;max-height:52px}
+  section[id]{scroll-margin-top:90px}
+}
+@media(prefers-reduced-motion:reduce){header#siteHeader,header#siteHeader .brand img{transition:none}}
+'''
+
+          if marker_css not in s:
+              s = s.replace('</style>', css + '\n</style>', 1)
+
+          marker_js = 'HEADER_FLUTUANTE_JS'
+          js = r'''
+// HEADER_FLUTUANTE_JS
+const persistentHeader=document.getElementById('siteHeader');
+const syncPersistentHeader=()=>{if(persistentHeader)persistentHeader.classList.toggle('scrolled',window.scrollY>36)};
+window.addEventListener('scroll',syncPersistentHeader,{passive:true});
+syncPersistentHeader();
+'''
+          if marker_js not in s:
+              idx = s.rfind('</script>')
+              if idx == -1:
+                  raise SystemExit('Tag </script> não encontrada')
+              s = s[:idx] + js + '\n' + s[idx:]
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Remover rotina temporária
+        shell: bash
+        run: rm -f .github/workflows/header-fixo.yml
+
+      - name: Publicar alteração
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/header-fixo.yml
+          if git diff --cached --quiet; then
+            echo "Nada para atualizar."
+            exit 0
+          fi
+          git commit -m "Adiciona header flutuante persistente [skip ci]"
+          git push
