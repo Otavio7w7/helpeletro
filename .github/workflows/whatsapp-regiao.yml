@@ -23,12 +23,7 @@ jobs:
 
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
-          mensagem = '''Olá! Vi no site da Help Eletro e gostaria de verificar a disponibilidade para atendimento.
-
-Cidade:
-Bairro/Endereço:
-Serviço desejado:'''
+          mensagem = 'Olá! Vi no site da Help Eletro e gostaria de verificar a disponibilidade para atendimento.\n\nCidade:\nBairro/Endereço:\nServiço desejado:'
           novo = 'https://wa.me/5519997287304?text=' + quote(mensagem, safe='')
           antigo = 'href="https://wa.me/5519997287304" target="_blank">Verificar disponibilidade →</a>'
           substituto = f'href="{novo}" target="_blank">Verificar disponibilidade →</a>'
