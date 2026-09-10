@@ -13,79 +13,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Aplicar melhorias visuais e de navegação
+      - name: Atualizar index
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
-
-          p = Path('index.html')
-          s = p.read_text(encoding='utf-8')
-
-          css = r'''
-/* ===== DINAMISMO SUTIL ===== */
-.scroll-progress{position:fixed;left:0;top:0;width:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--blue2));z-index:100;box-shadow:0 0 16px rgba(77,181,255,.55);transition:width .08s linear}
-nav>a[href^="#"]{position:relative}
-nav>a[href^="#"]:after{content:"";position:absolute;left:0;right:0;bottom:-11px;height:2px;border-radius:999px;background:var(--blue2);transform:scaleX(0);transform-origin:center;transition:transform .25s ease}
-nav>a[href^="#"].active{color:#fff}
-nav>a[href^="#"].active:after{transform:scaleX(1)}
-.hero-inner>*{opacity:0;transform:translateY(18px);animation:heroIn .72s cubic-bezier(.2,.75,.25,1) forwards}
-.hero-inner>*:nth-child(1){animation-delay:.08s}.hero-inner>*:nth-child(2){animation-delay:.18s}.hero-inner>*:nth-child(3){animation-delay:.29s}.hero-inner>*:nth-child(4){animation-delay:.4s}.hero-inner>*:nth-child(5){animation-delay:.51s}
-@keyframes heroIn{to{opacity:1;transform:none}}
-.card-img img,.work img{transition:transform .5s cubic-bezier(.2,.75,.25,1),filter .4s ease}
-.card:hover .card-img img{transform:scale(1.035)}
-.work:hover img{transform:scale(1.018);filter:brightness(1.04)}
-.card a{display:inline-flex;transition:transform .22s ease,color .22s ease}.card a:hover{transform:translateX(4px)}
-.diff{position:relative;overflow:hidden}.diff:after{content:"";position:absolute;inset:auto -25% -65% 25%;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(22,135,232,.14),transparent 68%);opacity:0;transform:translateY(20px);transition:.35s}.diff:hover:after{opacity:1;transform:none}
-.hero{background-position:center,center calc(50% + var(--hero-shift,0px));background-size:auto,cover;background-repeat:no-repeat}
-@media(max-width:640px){.hero{--hero-shift:0px!important;background-position:center,center!important}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.scroll-progress{transition:none}.hero-inner>*{opacity:1;transform:none;animation:none}.reveal{opacity:1;transform:none;transition:none}.card,.diff,.btn,.card-img img,.work img{transition:none!important}}
-'''
+          import base64
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          css=base64.b64decode('Ci8qID09PT09IERJTkFNSVNNTyBTVVRJTCA9PT09PSAqLwouc2Nyb2xsLXByb2dyZXNze3Bvc2l0aW9uOmZpeGVkO2xlZnQ6MDt0b3A6MDt3aWR0aDowO2hlaWdodDozcHg7YmFja2dyb3VuZDpsaW5lYXItZ3JhZGllbnQoOTBkZWcsdmFyKC0tYmx1ZSksdmFyKC0tYmx1ZTIpKTt6LWluZGV4OjEwMDtib3gtc2hhZG93OjAgMCAxNnB4IHJnYmEoNzcsMTgxLDI1NSwuNTUpO3RyYW5zaXRpb246d2lkdGggLjA4cyBsaW5lYXJ9Cm5hdj5hW2hyZWZePSIjIl17cG9zaXRpb246cmVsYXRpdmV9Cm5hdj5hW2hyZWZePSIjIl06YWZ0ZXJ7Y29udGVudDoiIjtwb3NpdGlvbjphYnNvbHV0ZTtsZWZ0OjA7cmlnaHQ6MDtib3R0b206LTExcHg7aGVpZ2h0OjJweDtib3JkZXItcmFkaXVzOjk5OXB4O2JhY2tncm91bmQ6dmFyKC0tYmx1ZTIpO3RyYW5zZm9ybTpzY2FsZVgoMCk7dHJhbnNmb3JtLW9yaWdpbjpjZW50ZXI7dHJhbnNpdGlvbjp0cmFuc2Zvcm0gLjI1cyBlYXNlfQpuYXY+YVtocmVmXj0iIyJdLmFjdGl2ZXtjb2xvcjojZmZmfQpuYXY+YVtocmVmXj0iIyJdLmFjdGl2ZTphZnRlcnt0cmFuc2Zvcm06c2NhbGVYKDEpfQouaGVyby1pbm5lcj4qe29wYWNpdHk6MDt0cmFuc2Zvcm06dHJhbnNsYXRlWSgxOHB4KTthbmltYXRpb246aGVyb0luIC43MnMgY3ViaWMtYmV6aWVyKC4yLC43NSwuMjUsMSkgZm9yd2FyZHN9Ci5oZXJvLWlubmVyPio6bnRoLWNoaWxkKDEpe2FuaW1hdGlvbi1kZWxheTouMDhzfS5oZXJvLWlubmVyPio6bnRoLWNoaWxkKDIpe2FuaW1hdGlvbi1kZWxheTouMThzfS5oZXJvLWlubmVyPio6bnRoLWNoaWxkKDMpe2FuaW1hdGlvbi1kZWxheTouMjlzfS5oZXJvLWlubmVyPio6bnRoLWNoaWxkKDQpe2FuaW1hdGlvbi1kZWxheTouNHN9Lmhlcm8taW5uZXI+KjpudGgtY2hpbGQoNSl7YW5pbWF0aW9uLWRlbGF5Oi41MXN9CkBrZXlmcmFtZXMgaGVyb0lue3Rve29wYWNpdHk6MTt0cmFuc2Zvcm06bm9uZX19Ci5jYXJkLWltZyBpbWcsLndvcmsgaW1ne3RyYW5zaXRpb246dHJhbnNmb3JtIC41cyBjdWJpYy1iZXppZXIoLjIsLjc1LC4yNSwxKSxmaWx0ZXIgLjRzIGVhc2V9Ci5jYXJkOmhvdmVyIC5jYXJkLWltZyBpbWd7dHJhbnNmb3JtOnNjYWxlKDEuMDM1KX0KLndvcms6aG92ZXIgaW1ne3RyYW5zZm9ybTpzY2FsZSgxLjAxOCk7ZmlsdGVyOmJyaWdodG5lc3MoMS4wNCl9Ci5jYXJkIGF7ZGlzcGxheTppbmxpbmUtZmxleDt0cmFuc2l0aW9uOnRyYW5zZm9ybSAuMjJzIGVhc2UsY29sb3IgLjIycyBlYXNlfS5jYXJkIGE6aG92ZXJ7dHJhbnNmb3JtOnRyYW5zbGF0ZVgoNHB4KX0KLmRpZmZ7cG9zaXRpb246cmVsYXRpdmU7b3ZlcmZsb3c6aGlkZGVufS5kaWZmOmFmdGVye2NvbnRlbnQ6IiI7cG9zaXRpb246YWJzb2x1dGU7aW5zZXQ6YXV0byAtMjUlIC02NSUgMjUlO2hlaWdodDoxNjBweDtib3JkZXItcmFkaXVzOjUwJTtiYWNrZ3JvdW5kOnJhZGlhbC1ncmFkaWVudChjaXJjbGUscmdiYSgyMiwxMzUsMjMyLC4xNCksdHJhbnNwYXJlbnQgNjglKTtvcGFjaXR5OjA7dHJhbnNmb3JtOnRyYW5zbGF0ZVkoMjBweCk7dHJhbnNpdGlvbjouMzVzfS5kaWZmOmhvdmVyOmFmdGVye29wYWNpdHk6MTt0cmFuc2Zvcm06bm9uZX0KLmhlcm97YmFja2dyb3VuZC1wb3NpdGlvbjpjZW50ZXIsY2VudGVyIGNhbGMoNTAlICsgdmFyKC0taGVyby1zaGlmdCwwcHgpKTtiYWNrZ3JvdW5kLXNpemU6YXV0byxjb3ZlcjtiYWNrZ3JvdW5kLXJlcGVhdDpuby1yZXBlYXR9CkBtZWRpYShtYXgtd2lkdGg6NjQwcHgpey5oZXJvey0taGVyby1zaGlmdDowcHghaW1wb3J0YW50O2JhY2tncm91bmQtcG9zaXRpb246Y2VudGVyLGNlbnRlciFpbXBvcnRhbnR9fQpAbWVkaWEocHJlZmVycy1yZWR1Y2VkLW1vdGlvbjpyZWR1Y2Upe2h0bWx7c2Nyb2xsLWJlaGF2aW9yOmF1dG99LnNjcm9sbC1wcm9ncmVzc3t0cmFuc2l0aW9uOm5vbmV9Lmhlcm8taW5uZXI+KntvcGFjaXR5OjE7dHJhbnNmb3JtOm5vbmU7YW5pbWF0aW9uOm5vbmV9LnJldmVhbHtvcGFjaXR5OjE7dHJhbnNmb3JtOm5vbmU7dHJhbnNpdGlvbjpub25lfS5jYXJkLC5kaWZmLC5idG4sLmNhcmQtaW1nIGltZywud29yayBpbWd7dHJhbnNpdGlvbjpub25lIWltcG9ydGFudH19Cg==').decode()
+          js=base64.b64decode('Ci8vIERpbmFtaXNtbyBzdXRpbDogcHJvZ3Jlc3NvLCBuYXZlZ2HDp8OjbyBhdGl2YSBlIHBhcmFsbGF4IGxldmUKY29uc3Qgc2Nyb2xsUHJvZ3Jlc3M9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Njcm9sbFByb2dyZXNzJyk7CmNvbnN0IGhlcm9TZWN0aW9uPWRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJy5oZXJvJyk7CmNvbnN0IGRlc2t0b3BOYXZMaW5rcz1bLi4uZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnbmF2IGFbaHJlZl49IiMiXScpXTsKY29uc3QgdHJhY2tlZFNlY3Rpb25zPWRlc2t0b3BOYXZMaW5rcy5tYXAoYT0+ZG9jdW1lbnQucXVlcnlTZWxlY3RvcihhLmdldEF0dHJpYnV0ZSgnaHJlZicpKSkuZmlsdGVyKEJvb2xlYW4pOwpsZXQgdGlja2luZz1mYWxzZTsKZnVuY3Rpb24gdXBkYXRlRHluYW1pY1VJKCl7CiAgY29uc3QgeT13aW5kb3cuc2Nyb2xsWXx8MDsKICBjb25zdCBtYXg9TWF0aC5tYXgoMSxkb2N1bWVudC5kb2N1bWVudEVsZW1lbnQuc2Nyb2xsSGVpZ2h0LXdpbmRvdy5pbm5lckhlaWdodCk7CiAgaWYoc2Nyb2xsUHJvZ3Jlc3Mpc2Nyb2xsUHJvZ3Jlc3Muc3R5bGUud2lkdGg9YCR7TWF0aC5taW4oMTAwLCh5L21heCkqMTAwKX0lYDsKICBpZihoZXJvU2VjdGlvbiYmaW5uZXJXaWR0aD42NDApaGVyb1NlY3Rpb24uc3R5bGUuc2V0UHJvcGVydHkoJy0taGVyby1zaGlmdCcsYCR7TWF0aC5taW4oNDgseSouMDU1KX1weGApOwogIGxldCBjdXJyZW50PScnOwogIHRyYWNrZWRTZWN0aW9ucy5mb3JFYWNoKHNlYz0+e2lmKHNlYy5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKS50b3A8PWlubmVySGVpZ2h0Ki4zOCljdXJyZW50PScjJytzZWMuaWR9KTsKICBkZXNrdG9wTmF2TGlua3MuZm9yRWFjaChhPT5hLmNsYXNzTGlzdC50b2dnbGUoJ2FjdGl2ZScsYS5nZXRBdHRyaWJ1dGUoJ2hyZWYnKT09PWN1cnJlbnQpKTsKICB0aWNraW5nPWZhbHNlOwp9CmZ1bmN0aW9uIHJlcXVlc3REeW5hbWljVUkoKXtpZighdGlja2luZyl7cmVxdWVzdEFuaW1hdGlvbkZyYW1lKHVwZGF0ZUR5bmFtaWNVSSk7dGlja2luZz10cnVlfX0KYWRkRXZlbnRMaXN0ZW5lcignc2Nyb2xsJyxyZXF1ZXN0RHluYW1pY1VJLHtwYXNzaXZlOnRydWV9KTsKYWRkRXZlbnRMaXN0ZW5lcigncmVzaXplJyxyZXF1ZXN0RHluYW1pY1VJLHtwYXNzaXZlOnRydWV9KTsKdXBkYXRlRHluYW1pY1VJKCk7Cg==').decode()
           if '/* ===== DINAMISMO SUTIL ===== */' not in s:
-              s = s.replace('</style>', css + '\n</style>', 1)
-
+              s=s.replace('</style>',css+'\n</style>',1)
           if 'id="scrollProgress"' not in s:
-              s = s.replace('<body>', '<body>\n<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>', 1)
-
-          js = r'''
-// Dinamismo sutil: progresso, navegação ativa e parallax leve
-const scrollProgress=document.getElementById('scrollProgress');
-const heroSection=document.querySelector('.hero');
-const desktopNavLinks=[...document.querySelectorAll('nav a[href^="#"]')];
-const trackedSections=desktopNavLinks.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
-let ticking=false;
-function updateDynamicUI(){
-  const y=window.scrollY||0;
-  const max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
-  if(scrollProgress)scrollProgress.style.width=`${Math.min(100,(y/max)*100)}%`;
-  if(heroSection&&innerWidth>640)heroSection.style.setProperty('--hero-shift',`${Math.min(48,y*.055)}px`);
-  let current='';
-  trackedSections.forEach(sec=>{if(sec.getBoundingClientRect().top<=innerHeight*.38)current='#'+sec.id});
-  desktopNavLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===current));
-  ticking=false;
-}
-function requestDynamicUI(){if(!ticking){requestAnimationFrame(updateDynamicUI);ticking=true}}
-addEventListener('scroll',requestDynamicUI,{passive:true});
-addEventListener('resize',requestDynamicUI,{passive:true});
-updateDynamicUI();
-'''
-          marker = "const GOOGLE_MAPS_API_KEY='';"
+              s=s.replace('<body>','<body>\n<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>',1)
+          marker="const GOOGLE_MAPS_API_KEY='';"
           if '// Dinamismo sutil: progresso, navegação ativa e parallax leve' not in s and marker in s:
-              s = s.replace(marker, js + '\n' + marker, 1)
-
-          # Em standby, evita exibir mensagem técnica ao cliente final.
-          s = s.replace('Integração com o Google Places preparada. Os dados serão atualizados automaticamente assim que a chave da API for configurada.', 'Confira nossa reputação no Google e veja a experiência de quem já contratou a Help Eletro.')
-
-          p.write_text(s, encoding='utf-8')
+              s=s.replace(marker,js+'\n'+marker,1)
+          s=s.replace('Integração com o Google Places preparada. Os dados serão atualizados automaticamente assim que a chave da API for configurada.','Confira nossa reputação no Google e veja a experiência de quem já contratou a Help Eletro.')
+          p.write_text(s,encoding='utf-8')
           PY
-
-      - name: Remover workflow temporário e publicar
+      - name: Publicar
         shell: bash
         run: |
-          rm -f .github/workflows/dinamismo-v2.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html .github/workflows/dinamismo-v2.yml
+          git add index.html
+          if git diff --cached --quiet; then exit 0; fi
           git commit -m "Deixa o site mais dinâmico sem perder a identidade [skip ci]"
           git push
