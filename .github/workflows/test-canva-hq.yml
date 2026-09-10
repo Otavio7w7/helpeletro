@@ -10,17 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Test URLs
+      - name: Test original URL
         shell: bash
         run: |
           set -euxo pipefail
-          mkdir -p /tmp/imgs
-          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:JPG/height:1536/quality:100/uri:ifs%3A%2F%2FM%2Fe24095dd-d873-4aab-9546-861ace2f282b/watermark:F/width:1536?csig=AAAAAAAAAAAAAAAAAAAAAHe2eMBULIeWVV1hU3eWHPaX6IyFTWt0XPJ4k08xFpwy&exp=1789099774&osig=AAAAAAAAAAAAAAAAAAAAADGyml40hV4EOGblZgzy6wEAQ6ZK67SOweRi3MFUyg4D&signer=media-rpc&x-canva-quality=thumbnail' -o /tmp/imgs/mesa.jpg
-          file /tmp/imgs/mesa.jpg
-          wc -c /tmp/imgs/mesa.jpg
+          url='https://media.canva.com/v2/files/uri:ifs%3A%2F%2FM%2Fe24095dd-d873-4aab-9546-861ace2f282b'
+          curl -L --fail --retry 2 "$url" -o /tmp/mesa.jpg
+          file /tmp/mesa.jpg
+          wc -c /tmp/mesa.jpg
           python - <<'PY'
           from PIL import Image
-          p='/tmp/imgs/mesa.jpg'
-          im=Image.open(p)
+          im=Image.open('/tmp/mesa.jpg')
           print('DIMENSIONS', im.size, im.format)
           PY
