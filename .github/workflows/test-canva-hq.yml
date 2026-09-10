@@ -1,0 +1,26 @@
+name: Test Canva HQ
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  test:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test URLs
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p /tmp/imgs
+          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:JPG/height:1536/quality:100/uri:ifs%3A%2F%2FM%2Fe24095dd-d873-4aab-9546-861ace2f282b/watermark:F/width:1536?csig=AAAAAAAAAAAAAAAAAAAAAHe2eMBULIeWVV1hU3eWHPaX6IyFTWt0XPJ4k08xFpwy&exp=1789099774&osig=AAAAAAAAAAAAAAAAAAAAADGyml40hV4EOGblZgzy6wEAQ6ZK67SOweRi3MFUyg4D&signer=media-rpc&x-canva-quality=thumbnail' -o /tmp/imgs/mesa.jpg
+          file /tmp/imgs/mesa.jpg
+          wc -c /tmp/imgs/mesa.jpg
+          python - <<'PY'
+          from PIL import Image
+          p='/tmp/imgs/mesa.jpg'
+          im=Image.open(p)
+          print('DIMENSIONS', im.size, im.format)
+          PY
