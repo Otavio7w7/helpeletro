@@ -1,0 +1,95 @@
+name: Configurar favicon Help Eletro
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  favicon:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar Pillow
+        run: pip install pillow
+
+      - name: Gerar favicon a partir da logo da Help Eletro
+        shell: bash
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          import json
+
+          logo_path = Path('assets/logo-help-eletro.png')
+          if not logo_path.exists():
+              raise SystemExit('Logo assets/logo-help-eletro.png não encontrada.')
+
+          img = Image.open(logo_path).convert('RGBA')
+          w, h = img.size
+
+          # A marca gráfica fica à esquerda da logo. Recorta somente o símbolo
+          # para que ele continue legível mesmo no tamanho pequeno da aba.
+          side = min(h, max(1, int(w * 0.43)))
+          top = max(0, (h - side) // 2)
+          symbol = img.crop((0, top, side, top + side))
+
+          # Mantém um quadrado limpo e usa reamostragem de alta qualidade.
+          base = symbol.resize((512, 512), Image.Resampling.LANCZOS)
+
+          sizes = {
+              'favicon-16x16.png': 16,
+              'favicon-32x32.png': 32,
+              'apple-touch-icon.png': 180,
+              'android-chrome-192x192.png': 192,
+              'android-chrome-512x512.png': 512,
+          }
+          for filename, size in sizes.items():
+              base.resize((size, size), Image.Resampling.LANCZOS).save(filename, optimize=True)
+
+          base.save('favicon.ico', format='ICO', sizes=[(16,16), (32,32), (48,48)])
+
+          manifest = {
+              'name': 'Help Eletro',
+              'short_name': 'Help Eletro',
+              'icons': [
+                  {'src': 'android-chrome-192x192.png', 'sizes': '192x192', 'type': 'image/png'},
+                  {'src': 'android-chrome-512x512.png', 'sizes': '512x512', 'type': 'image/png'}
+              ],
+              'theme_color': '#07111f',
+              'background_color': '#07111f',
+              'display': 'standalone'
+          }
+          Path('site.webmanifest').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          p = Path('index.html')
+          html = p.read_text(encoding='utf-8')
+          favicon_block = '''<link rel="icon" href="favicon.ico" sizes="any">\n<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">\n<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">\n<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">\n<link rel="manifest" href="site.webmanifest">'''
+
+          if 'href="favicon.ico"' not in html:
+              marker = '<meta name="theme-color" content="#07111f">'
+              if marker not in html:
+                  raise SystemExit('Ponto de inserção do favicon não encontrado no index.html.')
+              html = html.replace(marker, marker + '\n' + favicon_block, 1)
+              p.write_text(html, encoding='utf-8')
+          PY
+
+      - name: Publicar favicon e limpar rotina temporária
+        shell: bash
+        run: |
+          rm -f .github/workflows/favicon.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Adiciona favicon oficial da Help Eletro [skip ci]"
+          git push
