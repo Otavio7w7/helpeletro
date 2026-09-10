@@ -21,64 +21,18 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-
+          import base64
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
-          marker_css = '/* HEADER_FLUTUANTE_PERSISTENTE */'
-          css = r'''
-/* HEADER_FLUTUANTE_PERSISTENTE */
-section[id]{scroll-margin-top:110px}
-header#siteHeader{
-  position:fixed;
-  top:14px;
-  left:50%;
-  transform:translateX(-50%);
-  width:var(--wrap);
-  z-index:45;
-  padding:15px 18px;
-  border:1px solid rgba(255,255,255,.13);
-  border-radius:20px;
-  background:rgba(7,17,31,.76);
-  backdrop-filter:blur(18px) saturate(135%);
-  -webkit-backdrop-filter:blur(18px) saturate(135%);
-  box-shadow:0 16px 44px rgba(2,10,20,.22);
-  transition:padding .25s ease,background .25s ease,box-shadow .25s ease,border-color .25s ease;
-}
-header#siteHeader.scrolled{
-  padding:10px 16px;
-  background:rgba(7,17,31,.94);
-  border-color:rgba(77,181,255,.18);
-  box-shadow:0 14px 38px rgba(2,10,20,.34);
-}
-header#siteHeader .brand img{transition:width .25s ease,max-height .25s ease}
-header#siteHeader.scrolled .brand img{width:138px;max-height:54px}
-@media(max-width:980px){
-  header#siteHeader{top:10px;padding:11px 13px;border-radius:17px}
-  header#siteHeader.scrolled{padding:9px 12px}
-  header#siteHeader .brand img,header#siteHeader.scrolled .brand img{width:132px;max-height:52px}
-  section[id]{scroll-margin-top:90px}
-}
-@media(prefers-reduced-motion:reduce){header#siteHeader,header#siteHeader .brand img{transition:none}}
-'''
-
-          if marker_css not in s:
+          css = base64.b64decode('LyogSEVBREVSX0ZMVVRVQU5URV9QRVJTSVNURU5URSAqLwpzZWN0aW9uW2lkXXtzY3JvbGwtbWFyZ2luLXRvcDoxMTBweH0KaGVhZGVyI3NpdGVIZWFkZXJ7CiAgcG9zaXRpb246Zml4ZWQ7CiAgdG9wOjE0cHg7CiAgbGVmdDo1MCU7CiAgdHJhbnNmb3JtOnRyYW5zbGF0ZVgoLTUwJSk7CiAgd2lkdGg6dmFyKC0td3JhcCk7CiAgei1pbmRleDo0NTsKICBwYWRkaW5nOjE1cHggMThweDsKICBib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjEzKTsKICBib3JkZXItcmFkaXVzOjIwcHg7CiAgYmFja2dyb3VuZDpyZ2JhKDcsMTcsMzEsLjc2KTsKICBiYWNrZHJvcC1maWx0ZXI6Ymx1cigxOHB4KSBzYXR1cmF0ZSgxMzUlKTsKICAtd2Via2l0LWJhY2tkcm9wLWZpbHRlcjpibHVyKDE4cHgpIHNhdHVyYXRlKDEzNSUpOwogIGJveC1zaGFkb3c6MCAxNnB4IDQ0cHggcmdiYSgyLDEwLDIwLC4yMik7CiAgdHJhbnNpdGlvbjpwYWRkaW5nIC4yNXMgZWFzZSxiYWNrZ3JvdW5kIC4yNXMgZWFzZSxib3gtc2hhZG93IC4yNXMgZWFzZSxib3JkZXItY29sb3IgLjI1cyBlYXNlOwp9CmhlYWRlciNzaXRlSGVhZGVyLnNjcm9sbGVkewogIHBhZGRpbmc6MTBweCAxNnB4OwogIGJhY2tncm91bmQ6cmdiYSg3LDE3LDMxLC45NCk7CiAgYm9yZGVyLWNvbG9yOnJnYmEoNzcsMTgxLDI1NSwuMTgpOwogIGJveC1zaGFkb3c6MCAxNHB4IDM4cHggcmdiYSgyLDEwLDIwLC4zNCk7Cn0KaGVhZGVyI3NpdGVIZWFkZXIgLmJyYW5kIGltZ3t0cmFuc2l0aW9uOndpZHRoIC4yNXMgZWFzZSxtYXgtaGVpZ2h0IC4yNXMgZWFzZX0KaGVhZGVyI3NpdGVIZWFkZXIuc2Nyb2xsZWQgLmJyYW5kIGltZ3t3aWR0aDoxMzhweDttYXgtaGVpZ2h0OjU0cHh9CkBtZWRpYShtYXgtd2lkdGg6OTgwcHgpewogIGhlYWRlciNzaXRlSGVhZGVye3RvcDoxMHB4O3BhZGRpbmc6MTFweCAxM3B4O2JvcmRlci1yYWRpdXM6MTdweH0KICBoZWFkZXIjc2l0ZUhlYWRlci5zY3JvbGxlZHtwYWRkaW5nOjlweCAxMnB4fQogIGhlYWRlciNzaXRlSGVhZGVyIC5icmFuZCBpbWcsaGVhZGVyI3NpdGVIZWFkZXIuc2Nyb2xsZWQgLmJyYW5kIGltZ3t3aWR0aDoxMzJweDttYXgtaGVpZ2h0OjUycHh9CiAgc2VjdGlvbltpZF17c2Nyb2xsLW1hcmdpbi10b3A6OTBweH0KfQpAbWVkaWEocHJlZmVycy1yZWR1Y2VkLW1vdGlvbjpyZWR1Y2Upe2hlYWRlciNzaXRlSGVhZGVyLGhlYWRlciNzaXRlSGVhZGVyIC5icmFuZCBpbWd7dHJhbnNpdGlvbjpub25lfX0K').decode()
+          js = base64.b64decode('Ly8gSEVBREVSX0ZMVVRVQU5URV9KUwpjb25zdCBwZXJzaXN0ZW50SGVhZGVyPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzaXRlSGVhZGVyJyk7CmNvbnN0IHN5bmNQZXJzaXN0ZW50SGVhZGVyPSgpPT57aWYocGVyc2lzdGVudEhlYWRlcilwZXJzaXN0ZW50SGVhZGVyLmNsYXNzTGlzdC50b2dnbGUoJ3Njcm9sbGVkJyx3aW5kb3cuc2Nyb2xsWT4zNil9Owp3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcignc2Nyb2xsJyxzeW5jUGVyc2lzdGVudEhlYWRlcix7cGFzc2l2ZTp0cnVlfSk7CnN5bmNQZXJzaXN0ZW50SGVhZGVyKCk7Cg==').decode()
+          if 'HEADER_FLUTUANTE_PERSISTENTE' not in s:
               s = s.replace('</style>', css + '\n</style>', 1)
-
-          marker_js = 'HEADER_FLUTUANTE_JS'
-          js = r'''
-// HEADER_FLUTUANTE_JS
-const persistentHeader=document.getElementById('siteHeader');
-const syncPersistentHeader=()=>{if(persistentHeader)persistentHeader.classList.toggle('scrolled',window.scrollY>36)};
-window.addEventListener('scroll',syncPersistentHeader,{passive:true});
-syncPersistentHeader();
-'''
-          if marker_js not in s:
+          if 'HEADER_FLUTUANTE_JS' not in s:
               idx = s.rfind('</script>')
               if idx == -1:
-                  raise SystemExit('Tag </script> não encontrada')
+                  raise SystemExit('Tag script de fechamento não encontrada')
               s = s[:idx] + js + '\n' + s[idx:]
-
           p.write_text(s, encoding='utf-8')
           PY
 
