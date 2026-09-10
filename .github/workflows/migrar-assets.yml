@@ -1,0 +1,84 @@
+name: Migrar imagens do Netlify para GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrar:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Baixar imagens originais do Netlify
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+
+          base="https://helpeletro.netlify.app/assets"
+
+          curl -fL --retry 3 "$base/logo-help-eletro.png" -o assets/logo-help-eletro.png
+          curl -fL --retry 3 "$base/infraestrutura.jpeg" -o assets/infraestrutura.jpeg
+          curl -fL --retry 3 "$base/acabamento.jpeg" -o assets/acabamento.jpeg
+          curl -fL --retry 3 "$base/perfil-led.jpeg" -o assets/perfil-led.jpeg
+          curl -fL --retry 3 "$base/quadro-interno.jpeg" -o assets/quadro-interno.jpeg
+          curl -fL --retry 3 "$base/quadro-final.jpeg" -o assets/quadro-final.jpeg
+          curl -fL --retry 3 "$base/antes-depois.jpeg" -o assets/antes-depois.jpeg
+          curl -fL --retry 3 "$base/som-iluminacao.jpeg" -o assets/som-iluminacao.jpeg
+          curl -fL --retry 3 "$base/som-seguranca.jpeg" -o assets/som-seguranca.jpeg
+
+      - name: Trocar URLs externas por caminhos locais
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('https://helpeletro.netlify.app/assets/', 'assets/')
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Remover arquivos antigos comprimidos que não são mais usados
+        shell: bash
+        run: |
+          rm -f assets/altura.webp \
+                assets/camera.webp \
+                assets/painel.webp \
+                assets/panel-hq.webp \
+                assets/painel-hq.b64.txt \
+                assets/tomadas.webp
+
+      - name: Confirmar que o site não depende mais do Netlify
+        shell: bash
+        run: |
+          if grep -R "helpeletro.netlify.app" index.html; then
+            echo "Ainda existe referência ao Netlify no index.html"
+            exit 1
+          fi
+
+          echo "Imagens locais:"
+          ls -lh assets
+
+      - name: Publicar migração
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets
+
+          if git diff --cached --quiet; then
+            echo "Nada para atualizar."
+            exit 0
+          fi
+
+          git commit -m "Migra imagens do Netlify para o GitHub Pages [skip ci]"
+          git push
