@@ -1,0 +1,91 @@
+name: Aplicar dinamismo sutil
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Aplicar melhorias visuais e de navegação
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          css = r'''
+/* ===== DINAMISMO SUTIL ===== */
+.scroll-progress{position:fixed;left:0;top:0;width:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--blue2));z-index:100;box-shadow:0 0 16px rgba(77,181,255,.55);transition:width .08s linear}
+nav>a[href^="#"]{position:relative}
+nav>a[href^="#"]:after{content:"";position:absolute;left:0;right:0;bottom:-11px;height:2px;border-radius:999px;background:var(--blue2);transform:scaleX(0);transform-origin:center;transition:transform .25s ease}
+nav>a[href^="#"].active{color:#fff}
+nav>a[href^="#"].active:after{transform:scaleX(1)}
+.hero-inner>*{opacity:0;transform:translateY(18px);animation:heroIn .72s cubic-bezier(.2,.75,.25,1) forwards}
+.hero-inner>*:nth-child(1){animation-delay:.08s}.hero-inner>*:nth-child(2){animation-delay:.18s}.hero-inner>*:nth-child(3){animation-delay:.29s}.hero-inner>*:nth-child(4){animation-delay:.4s}.hero-inner>*:nth-child(5){animation-delay:.51s}
+@keyframes heroIn{to{opacity:1;transform:none}}
+.card-img img,.work img{transition:transform .5s cubic-bezier(.2,.75,.25,1),filter .4s ease}
+.card:hover .card-img img{transform:scale(1.035)}
+.work:hover img{transform:scale(1.018);filter:brightness(1.04)}
+.card a{display:inline-flex;transition:transform .22s ease,color .22s ease}.card a:hover{transform:translateX(4px)}
+.diff{position:relative;overflow:hidden}.diff:after{content:"";position:absolute;inset:auto -25% -65% 25%;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(22,135,232,.14),transparent 68%);opacity:0;transform:translateY(20px);transition:.35s}.diff:hover:after{opacity:1;transform:none}
+.hero{background-position:center,center calc(50% + var(--hero-shift,0px));background-size:auto,cover;background-repeat:no-repeat}
+@media(max-width:640px){.hero{--hero-shift:0px!important;background-position:center,center!important}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.scroll-progress{transition:none}.hero-inner>*{opacity:1;transform:none;animation:none}.reveal{opacity:1;transform:none;transition:none}.card,.diff,.btn,.card-img img,.work img{transition:none!important}}
+'''
+          if '/* ===== DINAMISMO SUTIL ===== */' not in s:
+              s = s.replace('</style>', css + '\n</style>', 1)
+
+          if 'id="scrollProgress"' not in s:
+              s = s.replace('<body>', '<body>\n<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>', 1)
+
+          js = r'''
+// Dinamismo sutil: progresso, navegação ativa e parallax leve
+const scrollProgress=document.getElementById('scrollProgress');
+const heroSection=document.querySelector('.hero');
+const desktopNavLinks=[...document.querySelectorAll('nav a[href^="#"]')];
+const trackedSections=desktopNavLinks.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+let ticking=false;
+function updateDynamicUI(){
+  const y=window.scrollY||0;
+  const max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
+  if(scrollProgress)scrollProgress.style.width=`${Math.min(100,(y/max)*100)}%`;
+  if(heroSection&&innerWidth>640)heroSection.style.setProperty('--hero-shift',`${Math.min(48,y*.055)}px`);
+  let current='';
+  trackedSections.forEach(sec=>{if(sec.getBoundingClientRect().top<=innerHeight*.38)current='#'+sec.id});
+  desktopNavLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===current));
+  ticking=false;
+}
+function requestDynamicUI(){if(!ticking){requestAnimationFrame(updateDynamicUI);ticking=true}}
+addEventListener('scroll',requestDynamicUI,{passive:true});
+addEventListener('resize',requestDynamicUI,{passive:true});
+updateDynamicUI();
+'''
+          marker = "const GOOGLE_MAPS_API_KEY='';"
+          if '// Dinamismo sutil: progresso, navegação ativa e parallax leve' not in s and marker in s:
+              s = s.replace(marker, js + '\n' + marker, 1)
+
+          # Em standby, evita exibir mensagem técnica ao cliente final.
+          s = s.replace('Integração com o Google Places preparada. Os dados serão atualizados automaticamente assim que a chave da API for configurada.', 'Confira nossa reputação no Google e veja a experiência de quem já contratou a Help Eletro.')
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Remover workflow temporário e publicar
+        shell: bash
+        run: |
+          rm -f .github/workflows/dinamismo-v2.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/dinamismo-v2.yml
+          git commit -m "Deixa o site mais dinâmico sem perder a identidade [skip ci]"
+          git push
