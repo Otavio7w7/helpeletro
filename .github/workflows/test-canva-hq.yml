@@ -1,4 +1,4 @@
-name: Teste Canva HQ
+name: Teste fonte HQ
 on:
   push:
     branches: [main]
@@ -6,26 +6,15 @@ jobs:
   testar:
     runs-on: ubuntu-latest
     steps:
-      - name: Testar variantes do link Canva
+      - name: Baixar posts públicos da Help Eletro
         shell: bash
         run: |
           set +e
-          base='https://media.canva.com/v2/image-resize'
-          src='ifs%3A%2F%2FM%2Fd281b467-e73e-42ba-982d-a50ca00e347b'
-          csig='AAAAAAAAAAAAAAAAAAAAAD5_1INVQ-q0C-Mqz-uhafk4I1i8eHvk91qgYSFXCmyf'
-          osig='AAAAAAAAAAAAAAAAAAAAAOAf3Sf21sBGd_oWlbQzY16qsdCO2hT8M3aKJQQOHB0c'
-          exp='1789102734'
-          urls=(
-            "$base/format:JPG/height:200/quality:75/uri:$src/watermark:F/width:200?csig=$csig&exp=$exp&osig=$osig&signer=media-rpc&x-canva-quality=thumbnail"
-            "$base/format:JPG/height:1536/quality:100/uri:$src/watermark:F/width:1536?exp=$exp&osig=$osig&signer=media-rpc"
-            "$base/format:JPG/height:1536/quality:100/uri:$src/watermark:F/width:1536?csig=$csig&exp=$exp&signer=media-rpc"
-            "$base/format:JPG/height:1536/quality:100/uri:$src/watermark:F/width:1536?osig=$osig&exp=$exp"
-            "$base/uri:$src?osig=$osig&exp=$exp&signer=media-rpc"
-          )
-          i=0
-          for u in "${urls[@]}"; do
-            i=$((i+1)); echo "=== variante $i ==="
-            code=$(curl -L -sS -o "/tmp/v$i" -w '%{http_code}' "$u")
-            echo "http=$code size=$(wc -c < /tmp/v$i 2>/dev/null || echo 0)"
-            file "/tmp/v$i" 2>/dev/null || true
-          done
+          python3 -m pip install --quiet instaloader
+          mkdir -p /tmp/ig
+          instaloader --dirname-pattern=/tmp/ig --no-videos --no-captions --no-metadata-json --no-compress-json --post-metadata-txt='' --fast-update help_eletro25
+          rc=$?
+          echo "instaloader_rc=$rc"
+          find /tmp/ig -maxdepth 2 -type f -printf '%f %s bytes\n' | head -80
+          echo "total=$(find /tmp/ig -type f | wc -l)"
+          exit 0
