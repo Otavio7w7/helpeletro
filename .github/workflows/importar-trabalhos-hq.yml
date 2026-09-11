@@ -6,7 +6,6 @@ permissions:
   contents: write
 jobs:
   importar:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,7 +14,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          import zipfile, re, shutil
+          import zipfile, re
 
           root = Path('.')
           archive = root / 'assets' / 'helpeletro-imagens-hq.zip'
@@ -42,9 +41,7 @@ jobs:
 
           html_path = root / 'index.html'
           html = html_path.read_text(encoding='utf-8')
-
           portfolio = '''<section class="portfolio" id="trabalhos"><div class="wrap"><div class="section-head dark-head reveal"><div><p class="kicker">Trabalhos realizados</p><h2>Alguns resultados em campo.</h2></div><p>Uma seleção de serviços reais da Help Eletro. Clique em qualquer imagem para ampliar e ver os detalhes.</p></div><div class="gallery"><button class="work reveal" data-img="assets/antes-depois.jpeg" data-caption="Antes e depois — acabamento elétrico"><img src="assets/antes-depois.jpeg" alt="Antes e depois de acabamento elétrico" loading="lazy" decoding="async"><span class="work-label">Antes e depois <span>Acabamento e regularização</span></span></button><button class="work reveal" data-img="assets/trabalho-tomada-mesa.jpg" data-caption="Instalação de tomada em mesa de escritório"><img src="assets/trabalho-tomada-mesa.jpg" alt="Instalação de tomada em mesa de escritório" loading="lazy" decoding="async"><span class="work-label">Tomada em mesa de escritório <span>Instalação e acabamento</span></span></button><button class="work reveal" data-img="assets/trabalho-refletor.jpg" data-caption="Instalação de refletor e iluminação"><img src="assets/trabalho-refletor.jpg" alt="Instalação de refletor e iluminação" loading="lazy" decoding="async"><span class="work-label">Refletor e iluminação <span>Instalação em campo</span></span></button><button class="work reveal" data-img="assets/trabalho-antes-depois-tomadas.jpg" data-caption="Antes e depois — instalação de tomadas"><img src="assets/trabalho-antes-depois-tomadas.jpg" alt="Antes e depois da instalação de tomadas" loading="lazy" decoding="async"><span class="work-label">Antes e depois — tomadas <span>Organização e acabamento</span></span></button><button class="work reveal" data-img="assets/trabalho-tomadas-sala.jpg" data-caption="Instalação de tomadas em sala"><img src="assets/trabalho-tomadas-sala.jpg" alt="Instalação de tomadas em sala" loading="lazy" decoding="async"><span class="work-label">Tomadas em sala <span>Instalação elétrica</span></span></button><button class="work reveal" data-img="assets/trabalho-nossos-trabalhos.jpg" data-caption="Serviços realizados pela Help Eletro"><img src="assets/trabalho-nossos-trabalhos.jpg" alt="Serviços realizados pela Help Eletro" loading="lazy" decoding="async"><span class="work-label">Nossos trabalhos <span>Execuções reais da Help Eletro</span></span></button><button class="work reveal" data-img="assets/som-iluminacao.jpeg" data-caption="Infraestrutura elétrica e iluminação"><img src="assets/som-iluminacao.jpeg" alt="Infraestrutura elétrica e iluminação" loading="lazy" decoding="async"><span class="work-label">Infraestrutura e iluminação <span>Execução em campo</span></span></button></div><p class="gallery-note">Imagens reais dos serviços da Help Eletro, preservadas em alta qualidade.</p></div></section>'''
-
           html, count = re.subn(r'<section class="portfolio" id="trabalhos">.*?</section>', portfolio, html, count=1, flags=re.S)
           if count != 1:
               raise SystemExit(f'Seção de portfólio não encontrada corretamente: {count}')
@@ -62,14 +59,12 @@ jobs:
 
           html_path.write_text(html, encoding='utf-8')
           archive.unlink()
-
           for name, size in expected.items():
               actual = (assets / name).stat().st_size
               print(f'{name}: {actual} bytes')
               if actual != size:
                   raise SystemExit(f'Falha de integridade em {name}')
           PY
-
           rm -f .github/workflows/importar-trabalhos-hq.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
