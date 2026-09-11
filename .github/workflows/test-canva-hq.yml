@@ -6,29 +6,26 @@ jobs:
   testar:
     runs-on: ubuntu-latest
     steps:
-      - name: Testar download em alta resolução
+      - name: Testar variantes do link Canva
         shell: bash
         run: |
-          set -euo pipefail
-          URL='https://media.canva.com/v2/image-resize/format:JPG/height:1536/quality:100/uri:ifs%3A%2F%2FM%2Fd281b467-e73e-42ba-982d-a50ca00e347b/watermark:F/width:1536?csig=AAAAAAAAAAAAAAAAAAAAAD5_1INVQ-q0C-Mqz-uhafk4I1i8eHvk91qgYSFXCmyf&exp=1789102734&osig=AAAAAAAAAAAAAAAAAAAAAOAf3Sf21sBGd_oWlbQzY16qsdCO2hT8M3aKJQQOHB0c&signer=media-rpc&x-canva-quality=thumbnail'
-          curl -fL --retry 2 "$URL" -o /tmp/test.jpg
-          wc -c /tmp/test.jpg
-          file /tmp/test.jpg
-          python3 - <<'PY'
-          from pathlib import Path
-          data=Path('/tmp/test.jpg').read_bytes()
-          def dims(d):
-              i=2
-              while i < len(d)-9:
-                  if d[i] != 0xFF:
-                      i += 1; continue
-                  marker=d[i+1]; i += 2
-                  if marker in (0xD8,0xD9): continue
-                  if i+2>len(d): break
-                  n=int.from_bytes(d[i:i+2],'big')
-                  if marker in range(0xC0,0xC4):
-                      return int.from_bytes(d[i+5:i+7],'big'), int.from_bytes(d[i+3:i+5],'big')
-                  i += n
-              return None
-          print('dims=',dims(data),'bytes=',len(data))
-          PY
+          set +e
+          base='https://media.canva.com/v2/image-resize'
+          src='ifs%3A%2F%2FM%2Fd281b467-e73e-42ba-982d-a50ca00e347b'
+          csig='AAAAAAAAAAAAAAAAAAAAAD5_1INVQ-q0C-Mqz-uhafk4I1i8eHvk91qgYSFXCmyf'
+          osig='AAAAAAAAAAAAAAAAAAAAAOAf3Sf21sBGd_oWlbQzY16qsdCO2hT8M3aKJQQOHB0c'
+          exp='1789102734'
+          urls=(
+            "$base/format:JPG/height:200/quality:75/uri:$src/watermark:F/width:200?csig=$csig&exp=$exp&osig=$osig&signer=media-rpc&x-canva-quality=thumbnail"
+            "$base/format:JPG/height:1536/quality:100/uri:$src/watermark:F/width:1536?exp=$exp&osig=$osig&signer=media-rpc"
+            "$base/format:JPG/height:1536/quality:100/uri:$src/watermark:F/width:1536?csig=$csig&exp=$exp&signer=media-rpc"
+            "$base/format:JPG/height:1536/quality:100/uri:$src/watermark:F/width:1536?osig=$osig&exp=$exp"
+            "$base/uri:$src?osig=$osig&exp=$exp&signer=media-rpc"
+          )
+          i=0
+          for u in "${urls[@]}"; do
+            i=$((i+1)); echo "=== variante $i ==="
+            code=$(curl -L -sS -o "/tmp/v$i" -w '%{http_code}' "$u")
+            echo "http=$code size=$(wc -c < /tmp/v$i 2>/dev/null || echo 0)"
+            file "/tmp/v$i" 2>/dev/null || true
+          done
