@@ -1,0 +1,67 @@
+name: Separar HTML CSS e JavaScript
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  separar:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Separar estrutura do site sem alterar comportamento
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          html = p.read_text(encoding='utf-8')
+
+          style_matches = list(re.finditer(r'<style>(.*?)</style>', html, flags=re.S))
+          script_matches = list(re.finditer(r'<script>(.*?)</script>', html, flags=re.S))
+
+          if len(style_matches) != 1:
+              raise SystemExit(f'Esperado exatamente 1 bloco <style>, encontrado: {len(style_matches)}')
+          if len(script_matches) != 1:
+              raise SystemExit(f'Esperado exatamente 1 bloco <script>, encontrado: {len(script_matches)}')
+
+          css = style_matches[0].group(1).strip() + '\n'
+          js = script_matches[0].group(1).strip() + '\n'
+
+          html = html[:style_matches[0].start()] + '<link rel="stylesheet" href="styles.css">' + html[style_matches[0].end():]
+
+          script_matches_after = list(re.finditer(r'<script>(.*?)</script>', html, flags=re.S))
+          if len(script_matches_after) != 1:
+              raise SystemExit('Bloco de JavaScript não encontrado após extração do CSS.')
+          sm = script_matches_after[0]
+          html = html[:sm.start()] + '<script src="script.js"></script>' + html[sm.end():]
+
+          if '<style>' in html or re.search(r'<script>(.*?)</script>', html, flags=re.S):
+              raise SystemExit('Ainda restaram blocos inline no index.html.')
+
+          Path('styles.css').write_text(css, encoding='utf-8')
+          Path('script.js').write_text(js, encoding='utf-8')
+          p.write_text(html, encoding='utf-8')
+
+          print('index.html:', p.stat().st_size, 'bytes')
+          print('styles.css:', Path('styles.css').stat().st_size, 'bytes')
+          print('script.js:', Path('script.js').stat().st_size, 'bytes')
+          PY
+
+      - name: Publicar nova estrutura e remover rotina temporária
+        shell: bash
+        run: |
+          rm -f .github/workflows/separar-estrutura.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Separa HTML CSS e JavaScript sem alterar o site [skip ci]"
+          git push
