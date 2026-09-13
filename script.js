@@ -8,3 +8,4 @@ const persistentHeader=document.getElementById('siteHeader');const syncPersisten
 
 // ORCAMENTO_INTELIGENTE_JS
 const quoteForm=document.getElementById('quoteForm');if(quoteForm){quoteForm.addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('quoteName').value.trim();const city=document.getElementById('quoteCity').value.trim();const service=document.getElementById('quoteService').value;const details=document.getElementById('quoteDetails').value.trim();if(!name||!city||!service){quoteForm.reportValidity();return}const lines=['Olá! Vim pelo site da Help Eletro e gostaria de solicitar um orçamento.','','Nome: '+name,'Cidade: '+city,'Serviço: '+service];if(details)lines.push('Detalhes: '+details);const url='https://wa.me/5519997287304?text='+encodeURIComponent(lines.join('\n'));window.open(url,'_blank','noopener,noreferrer')})}
+// ORCAMENTO_V1_PUBLICADO
