@@ -5,3 +5,6 @@ const progress=document.getElementById('scrollProgress');const navLinks=[...docu
 // Google reviews API kept on standby: no key configured, no billable calls.
 // HEADER_FLUTUANTE_JS
 const persistentHeader=document.getElementById('siteHeader');const syncPersistentHeader=()=>{if(persistentHeader)persistentHeader.classList.toggle('scrolled',window.scrollY>36)};window.addEventListener('scroll',syncPersistentHeader,{passive:true});syncPersistentHeader();
+
+// ORCAMENTO_INTELIGENTE_JS
+const quoteForm=document.getElementById('quoteForm');if(quoteForm){quoteForm.addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('quoteName').value.trim();const city=document.getElementById('quoteCity').value.trim();const service=document.getElementById('quoteService').value;const details=document.getElementById('quoteDetails').value.trim();if(!name||!city||!service){quoteForm.reportValidity();return}const lines=['Olá! Vim pelo site da Help Eletro e gostaria de solicitar um orçamento.','','Nome: '+name,'Cidade: '+city,'Serviço: '+service];if(details)lines.push('Detalhes: '+details);const url='https://wa.me/5519997287304?text='+encodeURIComponent(lines.join('\n'));window.open(url,'_blank','noopener,noreferrer')})}
