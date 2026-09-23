@@ -23,3 +23,30 @@ footer{background:#050c16;color:#fff;padding:70px 0 28px}.footer-grid{display:gr
 .quote{padding:108px 0;background:linear-gradient(180deg,#eef7ff 0%,#f8fbfe 100%);border-top:1px solid #deebf5;border-bottom:1px solid #deebf5}.quote-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:68px;align-items:center}.quote-copy>p:not(.kicker){max-width:520px;color:#607080}.quote-points{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}.quote-points span{padding:9px 13px;border-radius:999px;background:#fff;border:1px solid #d9e7f3;color:#31506d;font-size:.82rem;font-weight:800}.quote-form{padding:28px;background:#fff;border:1px solid #dce8f2;border-radius:24px;box-shadow:0 22px 55px rgba(12,45,76,.10)}.quote-form label{display:block;color:#24384d;font-size:.86rem;font-weight:800;margin-bottom:16px}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.quote-form input,.quote-form select,.quote-form textarea{width:100%;margin-top:7px;border:1px solid #ccdbe7;border-radius:13px;background:#fbfdff;color:#0b1726;padding:13px 14px;font:inherit;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}.quote-form input,.quote-form select{min-height:50px}.quote-form textarea{resize:vertical;min-height:120px}.quote-form input:focus,.quote-form select:focus,.quote-form textarea:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(22,135,232,.10)}.quote-submit{width:100%;border:0;cursor:pointer}.quote-privacy{margin:12px 2px 0;color:#7a8896;font-size:.76rem;line-height:1.45}
 @media(max-width:980px){.quote-grid{grid-template-columns:1fr;gap:34px}.quote-copy>p:not(.kicker){max-width:650px}}
 @media(max-width:700px){.quote{padding:70px 0}.quote-grid{gap:28px}.quote-form{padding:20px;border-radius:20px}.form-row{grid-template-columns:1fr;gap:0}.quote-points{gap:8px}.quote-points span{font-size:.78rem}.quote-form input,.quote-form select,.quote-form textarea{font-size:16px}.quote-submit{min-height:56px}}
+
+/* Cursores e interacoes: somente controles reais indicam clique. */
+a,button{cursor:pointer}
+.quote-form select{cursor:pointer}
+.work,.work *{cursor:zoom-in}
+.card-img img,footer img{cursor:default}
+.brand img,.card-img img,.work img,footer img,.lightbox img{user-select:none;-webkit-user-drag:none}
+.work-label,.work-label span{user-select:none}
+.num,.diff b,.stars,.review-rating,.review-avatar{user-select:none}
+
+/* Polimento discreto sem alterar dimensoes ou estrutura dos cards. */
+.card:hover{border-color:rgba(22,135,232,.38);box-shadow:0 20px 50px rgba(15,37,63,.12),0 8px 24px rgba(22,135,232,.07)}
+.work{transition:box-shadow .28s ease}
+.work:hover{box-shadow:0 12px 32px rgba(22,135,232,.14),0 0 0 1px rgba(77,181,255,.38)}
+.btn-blue:hover{box-shadow:0 14px 32px rgba(22,135,232,.33)}
+.google-btn:hover{border-color:rgba(22,135,232,.55);box-shadow:0 6px 18px rgba(22,135,232,.09)}
+.mobile:hover{background:rgba(22,135,232,.2)}
+.wa:hover{box-shadow:0 16px 38px rgba(37,211,102,.42)}
+.top:hover{background:var(--blue);transform:translateY(-2px)}
+.close:hover{background:#173553;border-color:var(--blue2)}
+footer a:hover{color:var(--blue2)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--blue2);outline-offset:3px}
+
+@media(prefers-reduced-motion:reduce){
+  .work,.google-btn,.mobile,.wa,.top{transition:none}
+  .btn:hover,.card:hover,.work:hover,.work:hover img,.card:hover .card-img img,.google-btn:hover,.wa:hover,.top:hover{transform:none}
+}
