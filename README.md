@@ -23,12 +23,15 @@ A interface é responsiva para desktop, tablet e celular. A publicação é feit
 - Portfólio de trabalhos realizados
 - Lightbox para ampliar as imagens do portfólio
 - Seção de avaliações de clientes
+- Seção curta de perguntas frequentes
 - Formulário de orçamento que monta uma mensagem para o WhatsApp
 - Botão flutuante de contato pelo WhatsApp
 - Botão de retorno ao topo
+- Página de erro 404 personalizada
+- Navegação por teclado com foco visível e link para pular ao conteúdo
 - Animações suaves de entrada e interação
 - Suporte à preferência `prefers-reduced-motion`
-- Imagens otimizadas em WebP
+- Imagens otimizadas em WebP, com carregamento adiado fora da primeira dobra
 - Favicon, ícones para dispositivos e Web App Manifest
 - Dados estruturados Schema.org em JSON-LD
 - Metadados para SEO local e URL canônica
@@ -51,6 +54,7 @@ O projeto não utiliza frameworks JavaScript ou bibliotecas externas para a inte
 ```text
 helpeletro/
 ├── index.html
+├── 404.html
 ├── styles.css
 ├── script.js
 ├── sitemap.xml
@@ -70,6 +74,7 @@ helpeletro/
 
 ## Últimas atualizações
 
+- Melhora performance, acessibilidade, FAQ e página 404
 - `336482b` — Reforça identidade da Help Eletro para mecanismos de busca
 - `bc18cdc` — Corrige favicon e ícones do site
 - `b646a5c` — Refina cursores e interações visuais do site
