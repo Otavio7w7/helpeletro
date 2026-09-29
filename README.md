@@ -68,13 +68,15 @@ helpeletro/
 ├── android-chrome-192x192.png
 ├── android-chrome-512x512.png
 └── assets/
-    ├── logo-help-eletro.png
+    ├── logo-help-eletro.png  (usado no Schema.org)
+    ├── logo-help-eletro.webp (usado nas páginas)
     └── imagens dos serviços e trabalhos
 ```
 
 ## Últimas atualizações
 
-- Remove 13 imagens sem uso em `assets/` (versões JPG/WebP substituídas), reduzindo cerca de 2,9 MB do repositório
+- Aumenta o contraste do texto de atribuição das avaliações (WCAG AA), usa o logo em WebP (64 KB → 16 KB) e adiciona `lastmod` ao sitemap
+- `41ea79b` — Remove 13 imagens sem uso em `assets/` (versões JPG/WebP substituídas), reduzindo cerca de 2,9 MB do repositório
 - `0f321ac` — Evita carregamento vazio no lightbox
 - `c860145` — Melhora performance, acessibilidade, FAQ e página 404
 - `336482b` — Reforça identidade da Help Eletro para mecanismos de busca
