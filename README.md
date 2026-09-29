@@ -37,7 +37,9 @@ A interface é responsiva para desktop, tablet e celular. A publicação é feit
 - Metadados para SEO local e URL canônica
 - Sitemap e regras de rastreamento
 - Metadados Open Graph e Twitter Card para compartilhamento
-- Eventos preparados para Google Analytics, enviados somente quando o `gtag` estiver configurado
+- Google Analytics 4 (`G-REFQPZ3DHW`) carregado somente após o visitante aceitar o aviso de cookies (LGPD)
+- Eventos de clique no WhatsApp, Instagram, avaliações do Google e envio do orçamento enviados ao Analytics
+- Link "Preferências de cookies" no rodapé para rever a escolha a qualquer momento
 
 ## Tecnologias utilizadas
 
@@ -75,7 +77,8 @@ helpeletro/
 
 ## Últimas atualizações
 
-- Aumenta o contraste do texto de atribuição das avaliações (WCAG AA), usa o logo em WebP (64 KB → 16 KB) e adiciona `lastmod` ao sitemap
+- Instala o Google Analytics 4 com aviso de cookies: nada é carregado antes do aceite, sinais de anúncios ficam desativados e a recusa apaga os cookies `_ga`
+- `976e7a2` — Aumenta o contraste do texto de atribuição das avaliações (WCAG AA), usa o logo em WebP (64 KB → 16 KB) e adiciona `lastmod` ao sitemap
 - `41ea79b` — Remove 13 imagens sem uso em `assets/` (versões JPG/WebP substituídas), reduzindo cerca de 2,9 MB do repositório
 - `0f321ac` — Evita carregamento vazio no lightbox
 - `c860145` — Melhora performance, acessibilidade, FAQ e página 404
@@ -98,6 +101,12 @@ O projeto conta com:
 - URL canônica no domínio oficial
 - Favicon e manifesto configurados
 - Domínio próprio publicado pelo GitHub Pages
+
+## Google Analytics
+
+- Propriedade GA4 com ID de medição `G-REFQPZ3DHW`, configurado em `script.js` (bloco `ANALYTICS_CONSENTIMENTO`).
+- A escolha do visitante fica salva no navegador (`localStorage`, chave `helpCookieConsent`).
+- Eventos enviados: `whatsapp_click`, `quote_form_submit`, `instagram_click` e `google_reviews_click`. Os dados digitados no formulário não são enviados, apenas o serviço selecionado.
 
 ## Contato
 

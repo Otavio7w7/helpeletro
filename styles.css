@@ -65,3 +65,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--blue2);outline-offs
 
 @media(max-width:700px){.faq{padding:70px 0}.faq-item summary{padding:18px;gap:14px}.faq-item p{padding:0 18px 19px}.error-header{padding:16px 0}.error-main{padding:64px 0}.error-actions{align-items:stretch;flex-direction:column}.error-actions .btn{width:100%}}
 @media(prefers-reduced-motion:reduce){.skip-link,.faq-item,.faq-icon{transition:none}}
+
+/* Aviso de cookies (Google Analytics) */
+.cookie-banner{position:fixed;left:24px;bottom:24px;z-index:40;width:min(440px,calc(100% - 128px));padding:18px 20px;border:1px solid rgba(255,255,255,.13);border-radius:18px;background:rgba(7,17,31,.96);color:#fff;box-shadow:0 22px 55px rgba(2,10,20,.35);backdrop-filter:blur(10px)}
+.cookie-banner[hidden]{display:none}
+.cookie-banner p{margin:0 0 14px;color:rgba(255,255,255,.82);font-size:.86rem;line-height:1.5}
+.cookie-actions{display:flex;gap:10px;flex-wrap:wrap}
+.cookie-btn{min-height:42px;padding:0 20px;border-radius:999px;font:inherit;font-size:.86rem;font-weight:800;cursor:pointer;transition:.25s}
+.cookie-accept{border:0;background:#0e70c4;color:#fff}
+.cookie-accept:hover{background:#0a62b0}
+.cookie-reject{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.06);color:#fff}
+.cookie-reject:hover{border-color:var(--blue2)}
+.cookie-prefs{padding:0;border:0;background:none;color:#8997aa;font:inherit;font-size:.9rem;text-align:left;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.cookie-prefs:hover{color:#fff}
+@media(max-width:640px){.cookie-banner{left:12px;right:12px;bottom:84px;width:auto;padding:16px}}
