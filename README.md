@@ -74,7 +74,9 @@ helpeletro/
 
 ## Últimas atualizações
 
-- Melhora performance, acessibilidade, FAQ e página 404
+- Remove 13 imagens sem uso em `assets/` (versões JPG/WebP substituídas), reduzindo cerca de 2,9 MB do repositório
+- `0f321ac` — Evita carregamento vazio no lightbox
+- `c860145` — Melhora performance, acessibilidade, FAQ e página 404
 - `336482b` — Reforça identidade da Help Eletro para mecanismos de busca
 - `bc18cdc` — Corrige favicon e ícones do site
 - `b646a5c` — Refina cursores e interações visuais do site
